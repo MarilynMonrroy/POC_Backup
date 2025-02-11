@@ -1,6 +1,11 @@
 trigger:
   - main  # O la rama que estés usando
 
+pr:
+  branches:
+    include:
+      - master  # Se ejecuta en cada Pull Request a master 
+
 pool:
   vmImage: 'ubuntu-latest'  # Usa 'windows-latest' si trabajas en Windows
 
