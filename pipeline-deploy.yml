@@ -1,0 +1,18 @@
+trigger:
+  - main  # O la rama que estés usando
+
+pool:
+  vmImage: 'ubuntu-latest'  # Usa 'windows-latest' si trabajas en Windows
+
+steps:
+  - checkout: self
+    persistCredentials: true
+
+  - script: |
+      git config --global user.email "marilyn.monrroy@oncedev.com"
+      git config --global user.name "marilynmonrroy"
+      git checkout main  # Cambia 'master' por 'main' si esa es la rama correcta
+      git add --all
+      git commit -m "Actualización desde Azure Pipelines"
+      git push https://$(accessGitHub)@github.com/MarilynMonrroy/POC_Backup.git main
+    displayName: 'Commit and Push to GitHub'
