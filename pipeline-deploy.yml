@@ -1,23 +1,36 @@
 trigger:
-  - master  # O la rama que estés usando
+  - master  # Se ejecuta en cada push a master
 
 pr:
   branches:
     include:
-      - master  # Se ejecuta en cada Pull Request a master 
+      - master  # Se ejecuta en cada PR hacia master
 
 pool:
-  vmImage: 'ubuntu-latest'  # Usa 'windows-latest' si trabajas en Windows
+  vmImage: 'ubuntu-latest'  # Cambia a windows-latest si es necesario
 
 steps:
   - checkout: self
     persistCredentials: true
+    fetchDepth: 0  # Clona todo el historial y evita "detached HEAD"
 
   - script: |
       git config --global user.email "marilyn.monrroy@oncedev.com"
       git config --global user.name "marilynmonrroy"
-      git checkout main  # Cambia 'master' por 'main' si esa es la rama correcta
+
+      # Verificar ramas disponibles en el repo clonado
+      git branch -a  
+
+      # Asegurarse de estar en master (o crearla si no está localmente)
+      git checkout master || git checkout -b master origin/master  
+
+      git pull origin master  # Asegurar que está actualizada
+
+      # Agregar y commitear cambios si existen
       git add --all
-      git commit -m "Actualización desde Azure Pipelines"
-      git push https://$(accessGitHub)@github.com/MarilynMonrroy/POC_Backup.git main
+      git diff --cached --quiet || git commit -m "Actualización desde Azure Pipelines"
+
+      # Hacer push a GitHub usando el token de acceso
+      git push https://$(accessGitHub)@github.com/MarilynMonrroy/POC_Backup.git master
     displayName: 'Commit and Push to GitHub'
+
