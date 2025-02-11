@@ -1,5 +1,5 @@
 trigger:
-  - main  # O la rama que estés usando
+  - master  # O la rama que estés usando
 
 pr:
   branches:
