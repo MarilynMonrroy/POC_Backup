@@ -1,10 +1,9 @@
-trigger:
-  - master  # Se ejecuta en cada push a master
+trigger: none  # No se ejecuta en commits directos a master
 
 pr:
   branches:
     include:
-      - master  # Se ejecuta en cada PR hacia master
+      - master  # Se ejecuta solo en PRs hacia master
 
 pool:
   vmImage: 'ubuntu-latest'  # Cambia a windows-latest si es necesario
