@@ -9,6 +9,14 @@ pool:
   vmImage: 'ubuntu-latest'  # Cambia a windows-latest si es necesario
 
 steps:
+  - task: AzureKeyVault@2
+    displayName: Azure Key Vault
+    inputs:
+      azureSubscription: 'connection-pipeline'
+      KeyVaultName: 'poc-secrets-qa '
+      SecretsFilter: 'accessGitHub'
+      RunAsPreJob: false
+
   - checkout: self
     persistCredentials: true
     fetchDepth: 0  # Clona todo el historial y evita "detached HEAD"
@@ -30,6 +38,6 @@ steps:
       git diff --cached --quiet || git commit -m "Actualización desde Azure Pipelines"
 
       # Hacer push a GitHub usando el token de acceso
-      git push https://$(accessGitHub)@github.com/MarilynMonrroy/POC_Backup.git master
+      git push https://$(ACCESSGITHUB)@github.com/MarilynMonrroy/POC_Backup.git master
     displayName: 'Commit and Push to GitHub'
 
